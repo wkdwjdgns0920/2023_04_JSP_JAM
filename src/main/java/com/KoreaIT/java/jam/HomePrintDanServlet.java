@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/home/printDan")
 public class HomePrintDanServlet extends HttpServlet {
-       
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.getRequestDispatcher("/jsp/home/printDan.jsp").forward(request, response);
 	}
 
