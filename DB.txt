@@ -11,6 +11,14 @@ CREATE TABLE article(
     `body` TEXT NOT NULL
 );
 
+CREATE TABLE `member`(
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    loginId CHAR(100) NOT NULL,
+    loginPw CHAR(200) NOT NULL,
+    `name` CHAR(100) NOT NULL
+);
+
 # article 테스트데이터 생성
 INSERT INTO article
 SET regDate = NOW(),
@@ -31,3 +39,10 @@ INSERT INTO article
 SET regDate = NOW(),
 title = '제목 4',
 `body` = '내용 4';
+
+SELECT *
+FROM article;
+
+SELECT *
+FROM `member`;
+
