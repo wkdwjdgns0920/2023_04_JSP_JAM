@@ -1,10 +1,5 @@
-<%@ page import="java.util.List"%>
-<%@ page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-List<Map<String, Object>> memberRows = (List<Map<String, Object>>) request.getAttribute("memberRows");
-%>
 
 <!DOCTYPE html>
 <html>
