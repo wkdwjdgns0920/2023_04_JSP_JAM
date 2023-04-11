@@ -1,10 +1,5 @@
-<%@ page import="java.util.List"%>
-<%@ page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-List<Map<String, Object>> memberRows = (List<Map<String, Object>>) request.getAttribute("memberRows");
-%>
 
 <!DOCTYPE html>
 <html>
@@ -18,18 +13,32 @@ List<Map<String, Object>> memberRows = (List<Map<String, Object>>) request.getAt
 	</div>
 
 	<h1>로그인</h1>
-
 	<script type="text/javascript">
-	fuction checkLoginId () {
-		for(int i = 0; i < <%=memberRows.size()%>; i++){
-			
+		var LoginForm__submitDone = false;
+		function LoginForm__submit(form) {
+			if (LoginForm__submitDone) {
+				alert('처리중 입니다');
+				return;
+			}
+			var loginId = form.loginId.value.trim();
+			var loginPw = form.loginPw.value.trim();
+			if (loginId.length == 0) {
+				alert('아이디를 입력해주세요');
+				form.loginId.focus();
+				return;
+			}
+			if (loginPw.length == 0) {
+				alert('비밀번호를 입력해주세요');
+				form.loginPw.focus();
+				return;
+			}
+			LoginForm__submitDone = true;
+			form.submit();
 		}
-	}
-	
-	
 	</script>
-	
-	<form method="post" action="doLogin" onsubmit="checkLoginId">
+
+	<form method="post" action="doLogin"
+		onsubmit="LoginForm__submit(this); return false;">
 		<div>
 			로그인 아이디 : <input autocomplete="off" type="text" placeholder="아이디를 입력해주세요"
 				name="loginId" />
@@ -38,6 +47,7 @@ List<Map<String, Object>> memberRows = (List<Map<String, Object>>) request.getAt
 			로그인 비밀번호 : <input autocomplete="off" type="text" placeholder="비밀번호를 입력해주세요"
 				name="loginPw" />
 		</div>
+
 
 		<button type="submit">로그인</button>
 
