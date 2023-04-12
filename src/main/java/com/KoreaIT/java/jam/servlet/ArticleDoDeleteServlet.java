@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,6 +26,14 @@ public class ArticleDoDeleteServlet extends HttpServlet {
 
 		response.setContentType("text/html; charset=UTF-8");
 
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("loginedMemberId") == null) {
+			response.getWriter().append(
+					String.format("<script>alert('로그인 후 이용해주세요'); location.replace('../member/login');</script>"));
+			return;
+		}
+
 		// DB 연결
 		Connection conn = null;
 
@@ -40,18 +49,24 @@ public class ArticleDoDeleteServlet extends HttpServlet {
 			conn = DriverManager.getConnection(Config.getDBUrl(), Config.getDBUser(), Config.getDBPassword());
 
 			response.getWriter().append("Success!!!");
-			
-			int id = Integer.parseInt(request.getParameter("id"));
-			
-			HttpSession session = request.getSession();
 
-			if (session.getAttribute("loginedMemberId") == null) {
+			int id = Integer.parseInt(request.getParameter("id"));
+
+			SecSql sql = SecSql.from("SELECT *");
+			sql.append("FROM article");
+			sql.append("WHERE id = ? ;", id);
+
+			Map<String, Object> articleRow = DBUtil.selectRow(conn, sql);
+
+			int loginedMemberId = (int) session.getAttribute("loginedMemberId");
+
+			if (loginedMemberId != (int) articleRow.get("memberId")) {
 				response.getWriter().append(
-						String.format("<script>alert('로그인 후 이용해주세요'); location.replace('../member/login');</script>"));
+						String.format("<script>alert('해당 게시글에 대한 권한이 없습니다'); location.replace('list');</script>", id));
 				return;
 			}
 
-			SecSql sql = SecSql.from("DELETE");
+			sql = SecSql.from("DELETE");
 			sql.append("FROM article");
 			sql.append("WHERE id = ? ;", id);
 
