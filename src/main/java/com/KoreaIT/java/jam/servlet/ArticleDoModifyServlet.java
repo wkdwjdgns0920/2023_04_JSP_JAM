@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.KoreaIT.java.jam.config.Config;
 import com.KoreaIT.java.jam.exception.SQLErrorException;
@@ -41,6 +42,14 @@ public class ArticleDoModifyServlet extends HttpServlet {
 			request.setCharacterEncoding("UTF-8");
 
 			int id = Integer.parseInt(request.getParameter("id"));
+			
+			HttpSession session = request.getSession();
+
+			if (session.getAttribute("loginedMemberId") == null) {
+				response.getWriter().append(
+						String.format("<script>alert('로그인 후 이용해주세요'); location.replace('../member/login');</script>"));
+				return;
+			}
 
 			String title = request.getParameter("title");
 			String body = request.getParameter("body");
